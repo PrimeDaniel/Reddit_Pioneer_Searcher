@@ -1,14 +1,17 @@
 import praw
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 print("now")
 
 # Set up your credentials
 reddit = praw.Reddit(
-    client_id=os.getenv('REDDIT_CLIENT_ID'),
-    client_secret=os.getenv('REDDIT_CLIENT_SECRET'),
-    user_agent=os.getenv('REDDIT_USER_AGENT')
-)
+    client_id = os.getenv("REDDIT_CLIENT_ID"),
+    client_secret = os.getenv("REDDIT_CLIENT_SECRET"),
+    user_agent = os.getenv("REDDIT_USER_AGENT"),
+    )
+
 
 
 print(reddit.read_only)
@@ -34,6 +37,6 @@ def search_reddit(subreddit, query, limit=10):
 
 # Try with different parameters
 print("Searching...")
-search_reddit("all", "AI", limit=10)
+search_reddit("all", "My dogs love music a lot, and often listen to the Rolling Stones", limit=10)
 
 print("Finished")
