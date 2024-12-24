@@ -17,9 +17,18 @@ reddit = praw.Reddit(
 print(reddit.read_only)
 # Output: True
 
-def search_reddit(subreddit, query, limit=10):
+def save_results_to_file(results, filename="results.txt"):
+    with open(filename, 'w') as file:
+        for post in results:
+            file.write(f"Title: {post.title}\n")
+            reddit_url = f"https://reddit.com{post.permalink}"
+            file.write(f"Reddit Post URL: {reddit_url}\n")
+            file.write(f"Score: {post.score}\n")
+            file.write("-" * 50 + "\n")
+
+def search_reddit(subreddit, query, limit=10, save=False):
     try:
-        results = reddit.subreddit(subreddit).search(query, limit=limit)
+        results = list(reddit.subreddit(subreddit).search(query, limit=limit))
         found_any = False
         for post in results:
             found_any = True
@@ -31,6 +40,9 @@ def search_reddit(subreddit, query, limit=10):
         
         if not found_any:
             print(f"No results found for '{query}' in r/{subreddit}")
+            
+        if save and found_any:
+            save_results_to_file(results)
             
     except Exception as e:
         print(f"An error occurred: {e}")
