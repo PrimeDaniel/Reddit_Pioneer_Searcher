@@ -1,75 +1,96 @@
 import praw
 import os
+import re
+import pandas as pd
 from dotenv import load_dotenv
-from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.stem import PorterStemmer
 
+# Load environment variables
 load_dotenv()
-print("now")
 
-# Set up your credentials
+# Initialize Reddit API
 reddit = praw.Reddit(
     client_id=os.getenv("REDDIT_CLIENT_ID"),
     client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
     user_agent=os.getenv("REDDIT_USER_AGENT"),
 )
 
-print(reddit.read_only)
-# Output: True
+print("Reddit API initialized. Read-only mode:", reddit.read_only)
 
-def save_results_to_file(results, filename="results.txt"):
-    with open(filename, 'w') as file:
-        for post in results:
-            file.write(f"Title: {post.title}\n")
-            reddit_url = f"https://reddit.com{post.permalink}"
-            file.write(f"Reddit Post URL: {reddit_url}\n")
-            file.write(f"Score: {post.score}\n")
-            file.write("-" * 50 + "\n")
 
-def search_reddit(subreddit, query, limit=10, save=False):
+# Initialize Porter Stemmer
+stemmer = PorterStemmer()
+
+# Define stopwords
+STOPWORDS = set([
+    "and", "or", "the", "is", "in", "to", "a", "of", "on", "for", "with", "it", "as", "at", "this", "that",
+    "an", "be", "are", "by", "was", "were", "from", "has", "have", "had", "but", "not", "you", "we", "they", "he", "she", "i", "me", "my"
+])
+
+
+# Function to clean text- remove special characters, convert to lowercase, remove stopwords, and stem words
+def clean_text(text):
+    text = re.sub(r"[^\w\s]", "", text)  # Remove special characters
+    text = text.lower()  # Convert to lowercase
+    words = text.split()
+    filtered_words = [stemmer.stem(word) for word in words if word not in STOPWORDS]
+    return " ".join(filtered_words)
+
+# PageRank-like function to rank posts
+def apply_pagerank(df, damping=0.85, iterations=10):
+    # Initialize equal ranks for all posts
+    df["pagerank"] = 1 / len(df)
+    for _ in range(iterations):
+        new_ranks = []
+        for _, post in df.iterrows():
+            rank_sum = 0
+            # Calculate the rank contribution from other posts
+            for _, other_post in df.iterrows():
+                if other_post["Subreddit"] == post["Subreddit"] and other_post["Title"] != post["Title"]:
+                    rank_sum += other_post["pagerank"] / len(df[df["Subreddit"] == post["Subreddit"]])
+            new_rank = (1 - damping) / len(df) + damping * rank_sum
+            new_ranks.append(new_rank)
+        df["pagerank"] = new_ranks
+    return df
+
+# Function to search Reddit and save results to Excel
+def search_reddit_to_excel(subreddit, query, limit=20, output_file="reddit_results.xlsx"):
     try:
-        results = list(reddit.subreddit(subreddit).search(query, limit=limit))
-        found_any = False
+        print(f"Searching Reddit for '{query}' in r/{subreddit}...")
+        results = reddit.subreddit(subreddit).search(query, limit=limit, sort='controversial', time_filter='day')
+
+        data = []
         for post in results:
-            found_any = True
-            print(f"\nTitle: {post.title}")
-            reddit_url = f"https://reddit.com{post.permalink}"
-            print(f"Reddit Post URL: {reddit_url}")
-            print(f"Score: {post.score}")
-            print("-" * 50)
-        
-        if not found_any:
+            data.append({
+                "Title": clean_text(post.title),
+                "Body": clean_text(post.selftext),  # Include cleaned post body
+                "Reddit Post URL": f"https://reddit.com{post.permalink}",
+                "Upvotes": post.score,
+                "Comments": post.num_comments,  # Add the number of comments
+                "Subreddit": post.subreddit.display_name,
+            })
+
+        if data:
+            # Create a DataFrame and apply PageRank
+            df = pd.DataFrame(data)
+            df = apply_pagerank(df)
+            
+            # Sort by PageRank
+            df = df.sort_values("pagerank", ascending=False)
+
+            # Save to Excel
+            df.to_excel(output_file, index=False)
+            print(f"Results saved to {output_file}")
+        else:
             print(f"No results found for '{query}' in r/{subreddit}")
-            
-        if save and found_any:
-            save_results_to_file(results)
-        
-        return [post.title for post in results]
-            
+    
     except Exception as e:
         print(f"An error occurred: {e}")
-        return []
+        raise
 
-def calculate_tfidf(titles):
-    if not titles:
-        print("No titles to process for TF-IDF.")
-        return
-    
-    vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform(titles)
-    
-    feature_names = vectorizer.get_feature_names_out()
-    for i, title in enumerate(titles):
-        print(f"\nTitle: {title}")
-        tfidf_scores = zip(feature_names, tfidf_matrix[i].toarray()[0])
-        sorted_scores = sorted(tfidf_scores, key=lambda x: x[1], reverse=True)
-        for term, score in sorted_scores[:10]:  # Display top 10 terms
-            print(f"Term: {term}, TF-IDF: {score}")
-
-# Try with different parameters
-print("Searching...")
-titles = search_reddit("all", "My dogs love music a lot, and often listen to the Rolling Stones", limit=10)
-
-print("Calculating TF-IDF...")
-calculate_tfidf(titles)
-
-print("Finished")
+# Main script
+if __name__ == "__main__":
+    try:
+        search_reddit_to_excel("all", "Funny cats", limit=20)
+    except Exception as e:
+        print(f"Error during Reddit search: {e}")
