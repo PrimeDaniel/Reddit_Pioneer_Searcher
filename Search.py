@@ -122,6 +122,6 @@ def search_reddit_to_excel(subreddit, query, limit=20, output_file="reddit_resul
 # Main script
 if __name__ == "__main__":
     try:
-        search_reddit_to_excel("all", "Funny cats", limit=20)
+        search_reddit_to_excel("all", "Funny cats", limit=10)
     except Exception as e:
         print(f"Error during Reddit search: {e}")
