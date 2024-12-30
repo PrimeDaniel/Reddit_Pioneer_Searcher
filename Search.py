@@ -9,19 +9,26 @@ from nltk.stem import PorterStemmer
 load_dotenv()
 
 # Initialize Reddit API
-reddit = praw.Reddit(
-    client_id=os.getenv("REDDIT_CLIENT_ID"),
-    client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
-    user_agent=os.getenv("REDDIT_USER_AGENT"),
-)
+try:
+    reddit = praw.Reddit(
+        client_id=os.getenv("REDDIT_CLIENT_ID"),
+        client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
+        user_agent=os.getenv("REDDIT_USER_AGENT"),
+    )
+    print("Reddit API initialized. Read-only mode:", reddit.read_only)
+except Exception as e:
+    print(f"Error initializing Reddit API: {e}")
+    raise
 
-print("Reddit API initialized. Read-only mode:", reddit.read_only)
 
 # Define stopwords
 STOPWORDS = set([
     "and", "or", "the", "is", "in", "to", "a", "of", "on", "for", "with", "it", "as", "at", "this", "that",
     "an", "be", "are", "by", "was", "were", "from", "has", "have", "had", "but", "not", "you", "we", "they", "he", "she", "i", "me", "my"
 ])
+
+#STOPWORDS = set(stopwords.words('english'))
+
 # Define stemmer
 stemmer = PorterStemmer()
 
