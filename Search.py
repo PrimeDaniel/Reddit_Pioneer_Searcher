@@ -4,6 +4,7 @@ import re
 import pandas as pd
 from dotenv import load_dotenv
 from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
 
 # Load environment variables
 load_dotenv()
@@ -27,7 +28,7 @@ STOPWORDS = set([
     "an", "be", "are", "by", "was", "were", "from", "has", "have", "had", "but", "not", "you", "we", "they", "he", "she", "i", "me", "my"
 ])
 
-#STOPWORDS = set(stopwords.words('english'))
+
 
 # Define stemmer
 stemmer = PorterStemmer()
@@ -129,6 +130,6 @@ def search_reddit_to_excel(subreddit, query, limit=20, output_file="reddit_resul
 # Main script
 if __name__ == "__main__":
     try:
-        search_reddit_to_excel("all", "Funny cats", limit=10)
+        search_reddit_to_excel("all", "Funny cats", limit=20)
     except Exception as e:
         print(f"Error during Reddit search: {e}")
