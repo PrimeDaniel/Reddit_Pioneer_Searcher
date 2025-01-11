@@ -3,133 +3,88 @@ import os
 import re
 import pandas as pd
 from dotenv import load_dotenv
-from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Load environment variables
 load_dotenv()
 
 # Initialize Reddit API
-try:
-    reddit = praw.Reddit(
-        client_id=os.getenv("REDDIT_CLIENT_ID"),
-        client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
-        user_agent=os.getenv("REDDIT_USER_AGENT"),
-    )
-    print("Reddit API initialized. Read-only mode:", reddit.read_only)
-except Exception as e:
-    print(f"Error initializing Reddit API: {e}")
-    raise
+reddit = praw.Reddit(
+    client_id=os.getenv("REDDIT_CLIENT_ID"),
+    client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
+    user_agent=os.getenv("REDDIT_USER_AGENT"),
+)
 
+# Define stopwords and lemmatizer
+STOPWORDS = set(stopwords.words("english"))
+lemmatizer = WordNetLemmatizer()
 
-# Define stopwords
-STOPWORDS = set([
-    "and", "or", "the", "is", "in", "to", "a", "of", "on", "for", "with", "it", "as", "at", "this", "that",
-    "an", "be", "are", "by", "was", "were", "from", "has", "have", "had", "but", "not", "you", "we", "they", "he", "she", "i", "me", "my"
-])
-
-
-
-# Define stemmer
-stemmer = PorterStemmer()
-
-# Function to clean text- remove special characters, convert to lowercase, remove stopwords, and stem words
+# Function to clean text
 def clean_text(text):
     text = re.sub(r"[^\w\s]", "", text)  # Remove special characters
     text = text.lower()  # Convert to lowercase
     words = text.split()
-    filtered_words = [stemmer.stem(word) for word in words if word not in STOPWORDS]
+    filtered_words = [lemmatizer.lemmatize(word) for word in words if word not in STOPWORDS]
     return " ".join(filtered_words)
-
-# PageRank-like function to rank posts
-def apply_pagerank(df, damping=0.85, iterations=10):
-    # Normalize engagement metrics
-    max_upvotes = df['Upvotes'].max() if df['Upvotes'].max() != 0 else 1
-    max_comments = df['Comments'].max() if df['Comments'].max() != 0 else 1
-    
-    # Calculate initial rank based on normalized engagement
-    df['engagement_score'] = (
-        (df['Upvotes'] / max_upvotes * 0.7) +  # Weight upvotes more
-        (df['Comments'] / max_comments * 0.3)   # Weight comments less
-    )
-    
-    # Initialize ranks based on engagement
-    df["pagerank"] = df['engagement_score'] / df['engagement_score'].sum()
-    
-    for _ in range(iterations):
-        new_ranks = []
-        for _, post in df.iterrows():
-            rank_sum = 0
-            
-            # Calculate similarity with other posts
-            for _, other_post in df.iterrows():
-                if post.name != other_post.name:  # Don't compare post with itself
-                    # Calculate content similarity
-                    title_similarity = len(set(post['Cleaned_Title'].split()) & 
-                                        set(other_post['Cleaned_Title'].split())) > 0
-                    
-                    # Consider both subreddit relationship and content similarity
-                    if (other_post["Subreddit"] == post["Subreddit"] or title_similarity):
-                        # Weight by engagement score
-                        contribution = (other_post["pagerank"] * 
-                                     other_post['engagement_score']) / len(df)
-                        rank_sum += contribution
-            
-            # Calculate new rank incorporating engagement
-            new_rank = ((1 - damping) * post['engagement_score'] / 
-                       df['engagement_score'].sum() + 
-                       damping * rank_sum)
-            new_ranks.append(new_rank)
-        
-        # Update ranks
-        df["pagerank"] = new_ranks
-        
-        # Normalize ranks
-        df["pagerank"] = df["pagerank"] / df["pagerank"].sum()
-    
-    return df
 
 # Function to search Reddit and save results to Excel
 def search_reddit_to_excel(subreddit, query, limit=20, output_file="reddit_results.xlsx"):
-    try:
-        print(f"\nSearching Reddit for '{query}' in r/{subreddit}...")
-        results = reddit.subreddit(subreddit).search(query, limit=limit, sort='controversial', time_filter='day')
+    results = reddit.subreddit(subreddit).search(
+        query=query, limit=limit, sort="hot", time_filter="day"
+    )
+    data = []
+    for post in results:
+        post_time = pd.to_datetime(post.created_utc, unit="s")  # Convert to datetime
+        data.append({
+            "Title": post.title,
+            "Body": post.selftext,
+            "Upvotes": post.score,
+            "Comments": post.num_comments,
+            "Subreddit": post.subreddit.display_name,
+            "Post Time (UTC)": post_time,
+        })
+    df = pd.DataFrame(data)
+    df.to_excel(output_file, index=False)
+    print(f"Results saved to {output_file}")
 
-        data = []
-        for post in results:
-            data.append({
-                "Title": post.title,
-                "Body": post.selftext,
-                "Post URL": f"https://reddit.com{post.permalink}",
-                "Upvotes": post.score,
-                "Comments": post.num_comments,  # Add the number of comments
-                "Subreddit": post.subreddit.display_name,
-                "Cleaned_Title": clean_text(post.title),
-                "Cleaned_Body": clean_text(post.selftext),  # Include cleaned post body
-                
-            })
-
-        if data:
-            # Create a DataFrame and apply PageRank
-            df = pd.DataFrame(data)
-            df = apply_pagerank(df)
-            
-            # Sort by PageRank
-            df = df.sort_values("pagerank", ascending=False)
-
-            # Save to Excel
-            df.to_excel(output_file, index=False)
-            print(f"\nResults saved to {output_file}\n")
-        else:
-            print(f"\nNo results found for '{query}' in r/{subreddit}\n")
+# Function to calculate TF-IDF and rank posts based on engagement
+def calculate_tfidf_with_engagement(input_file="reddit_results.xlsx", query="Funny cats"):
+    # Load data
+    df = pd.read_excel(input_file)
     
-    except Exception as e:
-        print(f"\nAn error occurred: {e}")
-        raise
+    # Combine title and body into a single content column
+    df["Content"] = (df["Title"].astype(str) + " " + df["Body"].fillna("")).apply(clean_text)
+
+    # TF-IDF calculation
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform(df["Content"])
+    query_vector = vectorizer.transform([clean_text(query)])
+    df["Relevance"] = cosine_similarity(query_vector, tfidf_matrix).flatten()
+
+    # Normalize engagement score using total-based normalization
+    total_upvotes = df["Upvotes"].sum() or 1
+    total_comments = df["Comments"].sum() or 1
+    df["Engagement Score"] = (
+        0.7 * df["Upvotes"] / total_upvotes + 0.3 * df["Comments"] / total_comments
+    )
+
+    # Combine relevance and engagement
+    df["PageRank"] = 0.7 * df["Relevance"] + 0.3 * df["Engagement Score"]
+
+    # Rank posts
+    ranked_df = df.sort_values(by="PageRank", ascending=False)
+
+    # Save ranked results
+    ranked_df.to_excel("ranked_results.xlsx", index=False)
+    print("Ranked results saved to 'ranked_results.xlsx'")
 
 # Main script
 if __name__ == "__main__":
-    try:
-        search_reddit_to_excel("all", "Funny cats", limit=20)
-    except Exception as e:
-        print(f"Error during Reddit search: {e}")
+    # Step 1: Search Reddit and save results
+    search_reddit_to_excel("all", "Funny cats", limit=10)
+
+    # Step 2: Calculate TF-IDF and rank posts
+    calculate_tfidf_with_engagement(query="Funny cats")
