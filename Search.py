@@ -81,10 +81,35 @@ def calculate_tfidf_with_engagement(input_file="reddit_results.xlsx", query="Fun
     ranked_df.to_excel("ranked_results.xlsx", index=False)
     print("Ranked results saved to 'ranked_results.xlsx'")
 
+
+# Function to generate most common words report
+def generate_common_words_report(input_file="reddit_results.xlsx", output_file="common_words.xlsx"):
+    # Load data
+    df = pd.read_excel(input_file)
+
+    # Combine title and body into a single content column
+    df["Content"] = (df["Title"].astype(str) + " " + df["Body"].fillna("")).apply(clean_text)
+
+    # Count word frequencies
+    all_words = " ".join(df["Content"]).split()
+    word_counts = Counter(all_words)
+
+    # Convert to DataFrame and save
+    common_words_df = pd.DataFrame(word_counts.items(), columns=["Word", "Frequency"])
+    common_words_df = common_words_df.sort_values(by="Frequency", ascending=False)
+    common_words_df.to_excel(output_file, index=False)
+    print(f"Common words report saved to {output_file}")
+
+
 # Main script
 if __name__ == "__main__":
     # Step 1: Search Reddit and save results
     search_reddit_to_excel("all", "Funny cats", limit=10)
 
+    # Step 2: Generate common words report
+    generate_common_words_report()
+
+
     # Step 2: Calculate TF-IDF and rank posts
     calculate_tfidf_with_engagement(query="Funny cats")
+    
