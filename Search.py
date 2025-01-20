@@ -5,8 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from collections import defaultdict
 
 # Load environment variables
 load_dotenv()
@@ -50,66 +49,33 @@ def search_reddit_to_excel(subreddit, query, limit=20, output_file="reddit_resul
     df.to_excel(output_file, index=False)
     print(f"Results saved to {output_file}")
 
-# Function to calculate TF-IDF and rank posts based on engagement
-def calculate_tfidf_with_engagement(input_file="reddit_results.xlsx", query="Funny cats"):
-    # Load data
-    df = pd.read_excel(input_file)
-    
-    # Combine title and body into a single content column
-    df["Content"] = (df["Title"].astype(str) + " " + df["Body"].fillna("")).apply(clean_text)
-
-    # TF-IDF calculation
-    vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform(df["Content"])
-    query_vector = vectorizer.transform([clean_text(query)])
-    df["Relevance"] = cosine_similarity(query_vector, tfidf_matrix).flatten()
-
-    # Normalize engagement score using total-based normalization
-    total_upvotes = df["Upvotes"].sum() or 1
-    total_comments = df["Comments"].sum() or 1
-    df["Engagement Score"] = (
-        0.7 * df["Upvotes"] / total_upvotes + 0.3 * df["Comments"] / total_comments
-    )
-
-    # Combine relevance and engagement
-    df["PageRank"] = 0.7 * df["Relevance"] + 0.3 * df["Engagement Score"]
-
-    # Rank posts
-    ranked_df = df.sort_values(by="PageRank", ascending=False)
-
-    # Save ranked results
-    ranked_df.to_excel("ranked_results.xlsx", index=False)
-    print("Ranked results saved to 'ranked_results.xlsx'")
-
-
-# Function to generate most common words report
-def generate_common_words_report(input_file="reddit_results.xlsx", output_file="common_words.xlsx"):
+# Function to generate inverted index
+def generate_inverted_index(input_file="reddit_results.xlsx", output_file="inverted_index.txt"):
     # Load data
     df = pd.read_excel(input_file)
 
     # Combine title and body into a single content column
     df["Content"] = (df["Title"].astype(str) + " " + df["Body"].fillna("")).apply(clean_text)
 
-    # Count word frequencies
-    all_words = " ".join(df["Content"]).split()
-    word_counts = Counter(all_words)
+    # Build the inverted index
+    inverted_index = defaultdict(list)
+    for idx, content in enumerate(df["Content"]):
+        post_id = str(idx + 1)  # Use numeric post ID starting from 1
+        words = set(content.split())  # Use set to avoid duplicates
+        for word in words:
+            inverted_index[word].append(post_id)
 
-    # Convert to DataFrame and save
-    common_words_df = pd.DataFrame(word_counts.items(), columns=["Word", "Frequency"])
-    common_words_df = common_words_df.sort_values(by="Frequency", ascending=False)
-    common_words_df.to_excel(output_file, index=False)
-    print(f"Common words report saved to {output_file}")
+    # Save inverted index to a text file
+    with open(output_file, "w") as f:
+        for word, post_ids in sorted(inverted_index.items()):
+            f.write(f"{word}\t{', '.join(post_ids)}\n")
 
+    print(f"Inverted index saved to {output_file}")
 
 # Main script
 if __name__ == "__main__":
     # Step 1: Search Reddit and save results
     search_reddit_to_excel("all", "Funny cats", limit=10)
 
-    # Step 2: Generate common words report
-    generate_common_words_report()
-
-
-    # Step 2: Calculate TF-IDF and rank posts
-    calculate_tfidf_with_engagement(query="Funny cats")
-    
+    # Step 2: Generate inverted index
+    generate_inverted_index()
