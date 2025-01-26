@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reddit Pioneer</title>
+
   <style>
     /* Basic Reset */
     * {
@@ -19,31 +20,45 @@
       background: #f8f9fa; /* Light background */
     }
 
-    /* Header (Reddit-like top bar) */
+    /* Fade-in Animation */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
     .header {
-      background: #ff4500; /* Classic Reddit orange-red */
-      color: #fff;
+    background: linear-gradient(to top, #ff4500, #a3a3a3);
+      color: #fdfdfd;
       padding: 20px;
       text-align: center;
+      animation: fadeIn 0.7s ease forwards; 
     }
 
     .header h1 {
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
 
     /* Main container */
     .container {
       max-width: 1200px;
-      margin: 20px auto;
+      margin: 20px auto 40px auto;
       padding: 20px;
       background: #ffffff;
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       direction: rtl; /* Ensure right-to-left text flow */
+      animation: fadeIn 0.8s ease forwards;
     }
 
-    /* Collapsible section style */
+    /* Collapsible Buttons */
     .collapsible {
       background-color: #ffefe6;
       color: #333;
@@ -56,24 +71,26 @@
       font-size: 1rem;
       border-radius: 4px;
       transition: background-color 0.3s ease;
+      
     }
-
     .collapsible:hover {
       background-color: #ffd7cc;
     }
-
-    /* Active state for collapsible button */
-    .active {
+    .collapsible.active {
       background-color: #ffd7cc;
     }
 
-    /* The content inside collapsible (hidden by default) */
+    /* Collapsible content (hidden by default) */
     .collapsible-content {
-      padding: 0 14px;
       display: none;
       overflow: hidden;
-      background-color: #ffffff;
+      background-color: #fff;
       margin-bottom: 10px;
+      padding: 15px;
+      border: 1px solid #ffd7cc;
+      border-radius: 4px;
+      /* Slight fadeIn for text */
+      animation: fadeIn 0.3s ease forwards;
     }
 
     /* Basic text styling */
@@ -89,177 +106,219 @@
     }
     ul, ol {
       margin-bottom: 16px;
-      padding-left: 40px;
+      padding-right: 20px; /* Adjust for RTL bullet indentation */
     }
     li {
       margin-bottom: 6px;
     }
 
-    /* Responsive images (if you have actual images) */
+    /* Images: ensure responsiveness */
     img {
       max-width: 100%;
       height: auto;
       display: block;
-      margin: 10px 0;
+      margin: 10px auto;
+      border-radius: 4px;
     }
 
-    /* Footer (optional) */
+    /* Simple hover effect on images */
+    img:hover {
+      filter: brightness(1.05);
+      transition: filter 0.3s;
+    }
+
+    /* Footer */
     .footer {
       text-align: center;
       color: #999;
       font-size: 0.9rem;
       margin-top: 20px;
     }
-
   </style>
 </head>
+
 <body>
 
-  <!-- Header -->
-  <div class="header">
-    <h1>Reddit Pioneer</h1>
-  </div>
-
+    <div class="header">
+        <img src="index_files/header.jpg" alt="Reddit Logo" style="width: 150px; margin-bottom: 10px;">
+        <h1>Reddit Pioneer Searcher</h1>
+      </div>
+      <div>
+        
+      </div>
+ 
   <!-- Main Content Container -->
   <div class="container">
+   
+    <!-- Title -->
+    <h2 style="margin-bottom: 15px; text-align: center";>אתר מסכם פרוייקט</h2>
+    
 
-    <!-- Collapsible 1: שאלה 3 (מבוא) -->
-    <button class="collapsible">שאלה 3: קדם פרויקט – בדיקת הזחלן</button>
+    <!-- Intro Paragraph -->
+    <p><b>מגישים:</b> דניאל פריימוביץ, ניצן עזרא, ליאור בוזגלו, עומר זומרשטיין</p>
+
+
+    <!-- First Part-->
+    <button class="collapsible">
+     1.	מהו תחום העיסוק המרכזי של האתר? מהו המידע הזמין למשתמשי האתר? ענו בפסקה אחת. צרפו את הקישור לאתר.</button>
     <div class="collapsible-content">
-      <p><b>שאלה </b>3 :קדם פרויקט –בדיקת הזחלן</p>
-      <p>לאחר שבניתם את הזחלן והרצתם את תוצאותיו. עליכם לבצע את הצעדים הבאים:</p>
-      <p><b>א. רשמו טכנולוגיות שונות מעניינות שהשתמשתם בהם בפרויקט.</b></p>
-      <p>
-        <b>PRAW (Python Reddit API Wrapper)</b> ספרייה זו מאפשרת גישה ל-Reddit API,
-        השתמשנו בה כדי לשלוף פוסטים מ-Reddit על פי מילות מפתח ותנאים מוגדרים מראש.
-      </p>
-      <p>
-        <b>dotenv</b> כלי זה עוזר לטעון משתני סביבה מקובץ .env. הוא שימושי כדי להגן על
-        המידע הרגיש כמו מזהים וסיסמאות של ה-API ולאפשר שינוי קל של ההגדרות הסביבתיות.
-      </p>
-      <p>
-        <b>pandas</b> ספרייה זו משמשת לניתוח וניהול נתונים ביעילות. בקוד שלנו, השתמשנו
-        ב-pandas כדי ליצור DataFrame של התוצאות ולבצע חישובים ודירוגים שונים על פי נתוני
-        המעורבות של הפוסטים.
-      </p>
-      <p>
-        <b>NLTK (Natural Language Toolkit)</b> השתמשנו ב-PorterStemmer מתוך ה-NLTK
-        כדי לבצע סטמינג למילים בטקסטים.
-      </p>
-      <p>
-        <b>re (Regular Expressions)</b> ספרייה זו מאפשרת עבודה עם ביטויים רגולריים
-        כדי לבצע ניקוי של הטקסטים על ידי הסרת תווים מיוחדים והמרת הטקסט לאותיות קטנות.
-      </p>
+    <p>
+        
+        להוסיף
+
+    
+    </p>
     </div>
 
-    <!-- Collapsible 2: סעיף ב -->
-    <button class="collapsible">ב. כמה זמן רצו השאילתות שלכם?</button>
+    <br>
+
+ <button class="collapsible">2.	רשמו שלוש שאילתות מעניינות שהייתם רוצים לקבל עליהן תשובה באתר, והאתר אינו עונה עליהן כעת. עבור כל שאילתא כזו, ציינו מהם פרטי המידע הנדרשים לצורך מענה על השאילתא.</button>
+ <div class="collapsible-content">
+    <p>
+        
+        להוסיף
+
+    
+    
+    </p>
+ </div>
+
+ <br>
+
+ <button class="collapsible">3.
+	בנו זחלן המחזיר את התוצאות לשאילתות שהגדרתם. מומלץ (אך לא חובה) לבנות את הזחלן בפייתון. הציגו את קוד הזחלן.</button>
+ <div class="collapsible-content">
+    <p>
+        
+        להוסיף
+
+    
+    
+    </p>
+ </div>
+
+
+    <br>
+
+    <button class="collapsible">4. רשמו טכנולוגיות שונות מעניינות שהשתמשתם בהם בפרויקט</button>
     <div class="collapsible-content">
-      <p>
-        כל עוד מבקשים כמות מוגבלת של קבצים (לדוגמא: 20) זמן ריצת השאילתה נע בין 0.50
-        ל-0.8 שניות, תלוי בעומס על ה-API באותו רגע ומורכבות השאילתה ששלחנו.
-        נוסף על כך מתבצע חישוב TFIDF שתלוי בזמן עיבוד המעבד של המחשב ולוקח בין 0.1
-        ל-0.2 שניות.
-        <br/>
-        שימוש במטמון יכול לשפר זמן זה במידה ומשתמשים בשאילתות אשר חוזרות על עצמן.
-      </p>
+      <p><b>PRAW (Python Reddit API Wrapper)</b> ספרייה זו מאפשרת גישה ל-Reddit API, השתמשנו בה כדי לשלוף פוסטים מ-Reddit על פי מילות מפתח ותנאים מוגדרים מראש.</p>
+      <p><b>dotenv</b> כלי זה עוזר לטעון משתני סביבה מקובץ .env. הוא שימושי כדי להגן על המידע הרגיש כמו מזהים וסיסמאות של ה-API ולאפשר שינוי קל של ההגדרות הסביבתיות.</p>
+      <p><b>pandas</b> ספרייה זו משמשת לניתוח וניהול נתונים ביעילות. בקוד שלנו, השתמשנו ב-pandas כדי ליצור DataFrame של התוצאות ולבצע חישובים ודירוגים שונים על פי נתוני המעורבות של הפוסטים.</p>
+      <p><b>NLTK (Natural Language Toolkit)</b> השתמשנו ב-PorterStemmer מתוך ה-NLTK כדי לבצע סטמינג למילים בטקסטים.</p>
+      <p><b>re (Regular Expressions)</b> ספרייה זו מאפשרת עבודה עם ביטויים רגולריים כדי לבצע ניקוי של הטקסטים על ידי הסרת תווים מיוחדים והמרת הטקסט לאותיות קטנות.</p>
+    </div>
+    <br>
+
+        <!-- Second Part -->
+    <button class="collapsible">5.
+     כמה זמן רצו השאילתות שלכם?</button>
+    <div class="collapsible-content">
+      <p>כל עוד מבקשים כמות מוגבלת של קבצים (לדוגמא: 20) זמן ריצת השאילתה נע בין 0.50 ל-0.8 שניות, תלוי בעומס על ה-API באותו רגע ומורכבות השאילתה ששלחנו.</p>
+      <p>נוסף על כך מתבצע חישוב TFIDF שתלוי בזמן עיבוד המעבד של המחשב ולוקח בין 0.1 ל-0.2. שימוש במטמון יכול לשפר זמן זה במידה ומשתמשים בשאילתות אשר חוזרות על עצמן.</p>
     </div>
 
-    <!-- Collapsible 3: סעיף ג -->
-    <button class="collapsible">ג. האם בדפים שהוחזרו קיימים hubs? Authorities?</button>
-    <div class="collapsible-content">
-      <p>
-        ה-HUBS הם בעצם התתי-פורומים ב-REDDIT (SUBREDDITS) שמכילים נושאים רבים שבהם
-        המשתמשים מרבים לשתף פוסטים. ה-AUTHORITIES הם הפוסטים שחוזרים אלינו המקושרים
-        ל-HUBS.
-      </p>
-    </div>
+    <br>
+    <button class="collapsible">
+    6.
+    בנו inverted index  ל- 15 המילים הנפוצות שחזרו (מספיק להתיחס ל -20 הדפים הראשונים שחזרו).</button>
+     <div class="collapsible-content">
+        <p>
+            
+            להוסיף
+    
+        
+        
+        </p>
+     </div>
+     <br>
+     <button class="collapsible">
+        7.	בחרו את אחת השאילתות, וחשבו tfIdf  של המושגים בשאילתא</button>
+         <div class="collapsible-content">
+            <p>
+                
+                להוסיף
+        
+            
+            
+            </p>
+         </div>
 
-    <!-- Collapsible 4: סעיף ד (pageRank) -->
-    <button class="collapsible">ד. חישוב PageRank ל-10 דפים</button>
+    <br>  
+    <!-- Third Part-->
+    <button class="collapsible">8. האם בדפים שהוחזרו קיימים hubs? Authorities?</button>
     <div class="collapsible-content">
-      <p>בחרו 10 דפים שהזחלן החזיר ואשר יש ביניהם קישורים. חשבו pageRank לכל דף, מומלץ להעזר בסקריפט מוכן. הציגו את החישובים ואת הדירוג הסופי.</p>
+      <p>ה-HUBS הם בעצם התתי-פורומים ב-REDDIT (SUBREDDITS) שמכילים נושאים רבים שבהם המשתמשים מרבים לשתף פוסטים. ה-AUTHORITIES הם הפוסטים שחוזרים אלינו המקושרים ל-HUBS.</p>
+    </div>
+    <br>
+
+    <button class="collapsible">9.	בחרו 10 דפים שהזחלן החזיר, ואשר יש ביניהם קישורים .חשבו pageRank  לכל דף</button>
+    <div class="collapsible-content">
+      <p>בחרו 10 דפים שהזחלן החזיר ואשר יש ביניהם קישורים. חשבו PageRank לכל דף, מומלץ להעזר בסקריפט מוכן. הציגו את החישובים ואת הדירוג הסופי.</p>
       <p><b>חישוב TF-IDF</b></p>
-      <p>
-        1. נחשב את כמות הפעמים שכל מילה מופיעה בפוסט מסוים (TF).
-      </p>
-      <p>
-        2. נחשב עד כמה מילה נפוצה בין כל הפוסטים (IDF). מילים נפוצות פחות יקבלו משקל גבוה יותר.
-      </p>
-      <p>לאחר מכן:</p>
+      <p>1. נחשב את כמות הפעמים שכל מילה מופיעה בפוסט מסוים (TF).</p>
+      <p>2. נחשב עד כמה מילה נפוצה בין כל הפוסטים (IDF). מילים נפוצות פחות יקבלו משקל גבוה יותר.</p>
       <p><b>TF-IDF</b> = TF × IDF</p>
-      <p><b>חישוב דמיון קוסינוס:</b> מחשבים את מידת הדמיון בין השאילתה לבין כל פוסט באמצעות נוסחת הדמיון הקוסינוס.</p>
-      <p>
-        <b>שימוש ב-לייקים ותגובות כמדד פופולריות:</b><br/>
-        ניתן משקלים לפעולות משתמשים (0.7 ללייק ו-0.3 לתגובה) ואז משלבים זאת בחישוב הסופי,
-        תוך מתן 0.7 רלוונטיות ו-0.3 חשיפה בסופו של דבר.
-      </p>
-      <p>
-        <b>חישוב ה-PAGERANK הסופי:</b><br/>
-        משקל 0.7 רלוונטיות ו-0.3 חשיפה.
-      </p>
-      <p>(מצורפות תמונות/משוואות להמחשה כפי שהופיעו בקובץ המקורי.)</p>
-    </div>
+      <p><b>חישוב דמיון קוסינוס:</b> מחשבים את מידת הדמיון בין השאילתה לבין כל פוסט באמצעות נוסחת דמיון קוסינוס.</p>
+      <p>שימוש ב-לייקים ותגובות כמדד פופולריות של הפוסט: ניתן משקלים לפעולות שמשתמשים עושים על הפוסט (0.7 ללייק ו-0.3 לתגובה) ואז משלבים זאת בדירוג הסופי.</p>
+      <p><b>חישוב ה-PAGERANK הסופי:</b> משקל של 0.7 רלוונטיות ו-0.3 חשיפה.</p>
 
-    <!-- Collapsible 5: סעיף ה (Feedback Relevance) -->
-    <button class="collapsible">ה. Feedback Relevance</button>
+
+      <img src="index_files/image001.png" alt="Illustration 1" />
+      <img src="index_files/image002.png" alt="Illustration 2" />
+      <img src="index_files/image003.png" alt="Illustration 3" />
+      <img src="index_files/image004.png" alt="Illustration 4" />
+      <img src="index_files/image005.png" alt="Illustration 5" />
+      <img src="index_files/image006.png" alt="Illustration 6" />
+      <img src="index_files/image007.png" alt="Illustration 7" />
+      <img src="index_files/image008.png" alt="Illustration 8" />
+      <img src="index_files/image009.png" alt="Illustration 9" />
+      <img src="index_files/image010.png" alt="Illustration 10" />
+      <img src="index_files/image011.png" alt="Illustration 11" />
+    </div>
+    <br>
+
+
+    <!-- Fourth Part-->
+    <button class="collapsible">10. Feedback Relevance</button>
     <div class="collapsible-content">
-      <p>
-        הצגנו את תוצאות החיפוש לשני משתמשים פעילים ברדיט. מתוך התוצאות הצגנו 10 פוסטים,
-        ושאלנו אותם עד כמה הם רלוונטיים עבורם. שני המשתמשים בחרו אילו פוסטים רלוונטיים
-        עבורם. להלן רשימת הפוסטים:
-      </p>
-      <ol>
-        <li>Show me your cat’s silliest facial expression</li>
-        <li>Funny cat vs dog</li>
-        <li>A very funny cat is being spoiled</li>
-        <li>Something for the Colonel to consider &#128568;</li>
-        <li>My cat is very funny and photogenic, and I would love someone to draw it</li>
-        <li>Well apparently my cat thinks that KFC stands for ‘Kitty Fried Chicken’</li>
-        <li>The cutest kitten playing with a ball of yarn</li>
-        <li>How to train your cat to do simple tricks</li>
-        <li>Stray cats in my neighborhood need help—what can I do?</li>
-        <li>Cats vs Dogs: The ultimate showdown</li>
-      </ol>
-
-      <p>
-        <b>משתמש ראשון:</b> העדפה חזקה לתוכן מצחיק וחמוד על חתולים. סימן 7 פוסטים רלוונטיים.
-        הציע להוריד בדירוג פוסטים שאינם מצחיקים, כגון “Stray cats need help”.
-      </p>
-      <p>
-        <b>משתמש שני:</b> העדפה למידע מעשי וטריקים לאילוף חתולים. סימן 6 פוסטים רלוונטיים.
-        החישוב עבור:
-      </p>
-      <p><b>User 1:</b> Precision = 7/10 = 0.7, Recall = 7/2000 = 0.0035</p>
-      <p><b>User 2:</b> Precision = 6/10 = 0.6, Recall = 6/2000 = 0.003</p>
-
-      <p>
-        <b>הצעות לשאילתות מותאמות:</b><br/>
-        - עבור משתמש ראשון: "funny cats" OR "funny pets"<br/>
-        - עבור משתמש שני: "cat training" OR "funny cat moments"
-      </p>
+      <p>הראו לשני משתמשים שונים את הדירוג
+     מהסעיף הקודם, בקשו מהם לסמן relevance ובצעו feedback relevance. האם ניתן להציע שאילתא מותאמת על מנת לשפר תוצאות?</p>
+      <p>משתמש ראשון: מעדיף תוכן מצחיק וחמוד על חתולים. סימן 7/10 פוסטים כרלוונטיים. משתמש שני: מתעניין במידע מעשי וטריקים לאילוף חתולים, סימן 6/10 כרלוונטיים.</p>
+      <p><b>User 1</b>: Precision = 7/10 = 0.7; Recall = 7/2000 = 0.0035<br>
+      <b>User 2</b>: Precision = 6/10 = 0.6; Recall = 6/2000 = 0.003</p>
+      <p>הצעות לשאילתות מותאמות:</p>
+      <ul>
+        <li>עבור משתמש ראשון: "funny cats" OR "funny pets"</li>
+        <li>עבור משתמש שני: "cat training" OR "funny cat moments"</li>
+      </ul>
     </div>
-    <!-- End collapsibles -->
+  
 
-    <!-- You can add more site content here, if needed -->
 
     <div class="footer">
-      &copy; 2025 Reddit Pioneer
+      &copy; Precision Pioneers, Data Retrieval Project 2025
     </div>
   </div>
 
-  <!-- Basic JS for collapsible interaction -->
+  <!-- Collapsible Interaction Script -->
   <script>
-    const collapsibles = document.querySelectorAll(".collapsible");
-    collapsibles.forEach((col) => {
-      col.addEventListener("click", function() {
-        this.classList.toggle("active");
-        const content = this.nextElementSibling;
-        if (content.style.display === "block") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }
+    // Ensure it runs once DOM is ready
+    document.addEventListener("DOMContentLoaded", function() {
+      const collapsibles = document.querySelectorAll(".collapsible");
+      collapsibles.forEach((btn) => {
+        btn.addEventListener("click", function() {
+          // Toggle the 'active' class on the button
+          this.classList.toggle("active");
+
+          // The collapsible content is the next sibling
+          const content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
       });
     });
   </script>
