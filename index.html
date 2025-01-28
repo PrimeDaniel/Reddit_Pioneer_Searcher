@@ -478,32 +478,9 @@ out	54,55,57,60,62,84,89,93,95,101,107,108,110,113,121,122,124,125,128,129,132,1
           
         </pre>				
         
-        חישוב TF-IDF		
-        
-        <pre>
-          TF-TABLE:																				
-																				
-																				
-Terms	D1	D2	D3	D4	D5	D6	D7	D8	D9	D10	D11	D12	D13	D14	D15	D16	D17	D18	D19	D20
-like	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
-so	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
-just	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0
-her	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
-cat	0	0	0	1	0	1	1	1	1	1	0	1	1	1	1	0	1	1	1	1
-im	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
-if	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
-its	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
-all	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
-about	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
-when	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
-funny	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
-your	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
-up	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0
-out	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+ 
 
-        </pre>
-
-				<img src="index_files/pictf.jpg" alt="Illustration 12" />		
+				
 						
 
 
@@ -518,9 +495,39 @@ out	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
          <div class="collapsible-content">
             <p>
                 
-                להוסיף
-        
+              חישוב TF-IDF		
+              <img src="index_files/pictf.jpg" alt="Illustration 12 "style="width: 300px;" />		
+              <pre>
+                TF-TABLE:																				
+                                              
+                                              
+      Terms	D1	D2	D3	D4	D5	D6	D7	D8	D9	D10	D11	D12	D13	D14	D15	D16	D17	D18	D19	D20
+      like	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+      so	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+      just	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0
+      her	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+      cat	0	0	0	1	0	1	1	1	1	1	0	1	1	1	1	0	1	1	1	1
+      im	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
+      if	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
+      its	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+      all	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
+      about	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
+      when	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+      funny	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
+      your	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0
+      up	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0
+      out	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+      
+    </pre>
+    <br>
+    <br>
+      TF-IDF TABLE																							
+																							
+																							
+
             
+        
+              <img src="index_files/pictfidf.jpg" alt="Illustration 12 "style="width: 900px;" />	
             
             </p>
          </div>
@@ -536,24 +543,35 @@ out	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
     <button class="collapsible">9.	בחרו 10 דפים שהזחלן החזיר, ואשר יש ביניהם קישורים .חשבו pageRank  לכל דף</button>
     <div class="collapsible-content">
       <p>בחרו 10 דפים שהזחלן החזיר ואשר יש ביניהם קישורים. חשבו PageRank לכל דף, מומלץ להעזר בסקריפט מוכן. הציגו את החישובים ואת הדירוג הסופי.</p>
-      <p><b>חישוב TF-IDF</b></p>
-      <p>1. נחשב את כמות הפעמים שכל מילה מופיעה בפוסט מסוים (TF).</p>
-      <p>2. נחשב עד כמה מילה נפוצה בין כל הפוסטים (IDF). מילים נפוצות פחות יקבלו משקל גבוה יותר.</p>
-      <p><b>TF-IDF</b> = TF × IDF</p>
-      <p><b>חישוב דמיון קוסינוס:</b> מחשבים את מידת הדמיון בין השאילתה לבין כל פוסט באמצעות נוסחת דמיון קוסינוס.</p>
-      <p>שימוש ב-לייקים ותגובות כמדד פופולריות של הפוסט: ניתן משקלים לפעולות שמשתמשים עושים על הפוסט (0.7 ללייק ו-0.3 לתגובה) ואז משלבים זאת בדירוג הסופי.</p>
-      <p><b>חישוב ה-PAGERANK הסופי:</b> משקל של 0.7 רלוונטיות ו-0.3 חשיפה.</p>
-
-
       <img src="index_files/image001.png" alt="Illustration 1" />
       <img src="index_files/image002.png" alt="Illustration 2" />
+      <p><b>חישוב TF-IDF</b></p>
+      
+      <p>1. נחשב את כמות הפעמים שכל מילה מופיעה בפוסט מסוים (TF).</p>
       <img src="index_files/image003.png" alt="Illustration 3" />
+      <p>2. נחשב עד כמה מילה נפוצה בין כל הפוסטים (IDF). מילים נפוצות פחות יקבלו משקל גבוה יותר.</p>
       <img src="index_files/image004.png" alt="Illustration 4" />
+      <p><b>TF-IDF</b> = TF × IDF</p>
       <img src="index_files/image005.png" alt="Illustration 5" />
-      <img src="index_files/image006.png" alt="Illustration 6" />
+      <p><b>חישוב דמיון קוסינוס:</b> מחשבים את מידת הדמיון בין השאילתה לבין כל פוסט באמצעות נוסחת דמיון קוסינוס.</p>
       <img src="index_files/image007.png" alt="Illustration 7" />
+      <img src="index_files/image006.png" alt="Illustration 6" />
       <img src="index_files/image008.png" alt="Illustration 8" />
+      
+      <p>שימוש ב-לייקים ותגובות כמדד פופולריות של הפוסט: ניתן משקלים לפעולות שמשתמשים עושים על הפוסט (0.7 ללייק ו-0.3 לתגובה) ואז משלבים זאת בדירוג הסופי.</p>
       <img src="index_files/image009.png" alt="Illustration 9" />
+      <p><b>חישוב ה-PAGERANK הסופי:</b> משקל של 0.7 רלוונטיות ו-0.3 חשיפה.</p>
+      
+
+
+      
+      
+      
+      
+
+      
+      
+      
       <img src="index_files/image010.png" alt="Illustration 10" />
       <img src="index_files/image011.png" alt="Illustration 11" />
     </div>
@@ -565,14 +583,78 @@ out	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
     <div class="collapsible-content">
       <p>הראו לשני משתמשים שונים את הדירוג
      מהסעיף הקודם, בקשו מהם לסמן relevance ובצעו feedback relevance. האם ניתן להציע שאילתא מותאמת על מנת לשפר תוצאות?</p>
-      <p>משתמש ראשון: מעדיף תוכן מצחיק וחמוד על חתולים. סימן 7/10 פוסטים כרלוונטיים. משתמש שני: מתעניין במידע מעשי וטריקים לאילוף חתולים, סימן 6/10 כרלוונטיים.</p>
-      <p><b>User 1</b>: Precision = 7/10 = 0.7; Recall = 7/2000 = 0.0035<br>
-      <b>User 2</b>: Precision = 6/10 = 0.6; Recall = 6/2000 = 0.003</p>
-      <p>הצעות לשאילתות מותאמות:</p>
-      <ul>
-        <li>עבור משתמש ראשון: "funny cats" OR "funny pets"</li>
-        <li>עבור משתמש שני: "cat training" OR "funny cat moments"</li>
-      </ul>
+     הצגנו את תוצאות החיפוש לשני משתמשים פעילים ברדיט. מתוך התוצאות הצגנו 10 פוסטים שעלו מהחיפוש, ושאלנו אותם עד כמה הם רלוונטיים עבורם. להלן רשימת הפוסטים אשר הצגנו להם:
+<pre>
+מספר	כותרת הפוסט
+1	Show me your cat’s silliest facial expression to add to this doodle😋
+2	Funny cat vs dog
+3	A very funny cat is being spoiled
+4	Something for the Colonel to consider 😸
+5	My cat is very funny and photogenic, and I would be happy if someone would draw him
+6	She looks so smol, I love her ❤️
+7	Kind of funny, but why do cats watch you when you sleep? When I wake I often open my eyes to the shadow version of this
+8	That one Sheba cat food ad with the neglectful mom.
+9	Getting a New Kitten! Help Me Pick a Name for the Little one!
+10	Thought this screenshot from the Dagi-Rahtborn playthrough would make for a funny meme. Poor Jo'sijar (aka Captain Cat Sparrow)... (סיפור חתולי מצחיק)
+
+
+
+משתמש ראשון
+פרופיל העדפות: אוהב תוכן צחוקים, בעל חיבה לחתולים ובעל פן הומוריסטי בולט.
+פוסטים רלוונטיים עבורו:
+(1) "Show me your cat’s silliest facial expression…" – מתבקש להציג הבעות פנים מצחיקות
+(2) "Funny cat vs dog" – מעלה תכנים משעשעים של חתולים וכלבים
+(3) "A very funny cat is being spoiled" – חתול מצחיק שמפנקים אותו
+(5) "My cat is very funny and photogenic…" – שוב, דגש על הומור וחתול פוטוגני
+(6) "She looks so smol, I love her ❤️" – פוסט חמוד במיוחד
+(7) "Kind of funny, but why do cats watch you when you sleep?" – הומור על התנהגות משונה של חתולים
+(10) "Thought this screenshot… funny meme…" – פוטנציאל למם מצחיק
+
+פוסטים פחות רלוונטיים עבורו:
+(4) "Something for the Colonel to consider…" – פחות ברור ומצחיק בעיניו
+(8) "That one Sheba cat food ad…" – פחות עוסק בחומרים מצחיקים ויותר בפרסומת/סיפור ספציפי
+(9) "Getting a New Kitten! Help Me Pick a Name…" – לא מחפש כרגע שמות לגורים
+
+בסה״כ, המשתמש הראשון סימן 7 פוסטים כרלוונטיים (1,2,3,5,6,7,10).
+חישוב Precision ו-Recall עבור משתמש ראשון
+
+<img src="index_files/user1.jpg" alt="Illustration 14" />
+
+
+
+
+משתמש שני
+פרופיל העדפות: אדם רציני מתעניין בגידול חתולים, אוהב חתולים משתעשעים. מחפש תוכן שעוזר ללמוד על חתולים.
+פוסטים רלוונטיים עבורו:
+(1) "Show me your cat’s silliest facial expression…" – מתבקש להציג הבעות פנים מצחיקות
+(3) "A very funny cat is being spoiled" – חתול מצחיק שמפנקים אותו
+(5) "My cat is very funny and photogenic…" – מעוניין בתמונות ובמידע על החתול, אולי גם השראה לציור
+(7) "Kind of funny, but why do cats watch you when you sleep?" – דיון על התנהגות חתולים
+(8) "That one Sheba cat food ad…" – מתעניין במזונות חתולים או פרסומות שקשורות לטיפול בהם
+(9) "Getting a New Kitten! Help Me Pick a Name for the Little one!" – רלוונטי מאוד לאימוץ וגידול גורים
+(6) "She looks so smol, I love her ❤️" – עוסק בגורים קטנים וחמודים (מתאים לאינטרס המשתמש לגבי גורים)
+(10) "Thought this screenshot… funny meme…" – למרות שהפוסט מצחיק, יש בו גם סיפור על החתול שמושך את תשומת ליבו
+בסה"כ, המשתמש השני סימן 8 פוסטים כרלוונטיים (1,3,5,6,7,8,9,10).
+
+חישוב Precision ו-Recall עבור משתמש שני
+
+
+<img src="index_files/user2.jpg" alt="Illustration 15" />
+
+
+
+הצעות לשאילתות מותאמות
+עבור המשתמש הראשון
+
+"Funny cat memes OR silly cat expressions OR cute cat videos"
+מיקוד בתכנים משעשעים, מצחיקים וחמודים.
+עבור המשתמש השני
+
+"Cat care tips OR adopting a kitten OR how to name a new cat"
+מיקוד במידע מעשי לאימוץ וגידול חתולים.
+בדוגמה זו ניתן לראות כיצד שני המשתמשים בוחרים פוסטים שונים על סמך העדפות שונות (אחד מחפש בעיקר תוכן מצחיק וקליל, והשני מחפש ידע וטיפים הקשורים לטיפול וגדילה של חתולים).
+החישוב של Precision ו-Recall מציג עד כמה התוצאות הרלוונטיות מתוך כלל התוצאות שהוצגו (Precision) ועד כמה הן משקפות את כלל התוכן הזמין בסאברדיט (Recall).
+</pre>
     </div>
   
 
